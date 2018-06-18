@@ -41,7 +41,7 @@ Axios.interceptors.request.use((config) => {
 
 Axios.interceptors.response.use((res) => {
     // Do something with response data
-    return res.data;
+    return res;
 }, (err) => {
     // Do something with response error
     return Promise.reject(err);
@@ -54,9 +54,9 @@ export default(opts) => {
     opts = Object.assign(defaults, opts);
 
 
-    opts.url+= '?advanced-backend=' + '';
+    opts.url+= '?advanced-backend=';
     // 处理不同请求方式的传参格式
-    if (method === 'get') {
+    if (opts.method === 'get') {
         opts.params = {
             params:opts.params
         }

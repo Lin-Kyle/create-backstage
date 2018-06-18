@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import {Form, Icon, Input, Button, Checkbox} from 'antd';
-import Axios from 'JS/Axios';
-import api from '@/api';
+import {observer, inject} from 'mobx-react';
 
 const FormItem = Form.Item,
     LoginWrapper = styled.div `
@@ -11,27 +10,20 @@ margin: 0 auto;
 transform: translate(0, 200px);
 `;
 
-class NormalLoginForm extends Component {
+@inject(stores => ({user: stores.user}))
+@observer class NormalLoginForm extends Component {
     handleSubmit = (e) => {
+        const _props = this.props;
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                Axios({
-                    url: api.login,
-                    method:'post',
-                    params: {
-                        username: values.userName,
-                        password: values.password,
-                        remember: values.remember
-                    }
-                }).then(res => {
-                    console.log(res);
-                })
+                _props.user.login(values);
             }
         });
     }
     render() {
         const {getFieldDecorator} = this.props.form;
+
         return (<LoginWrapper>
             <h1>账号密码登陆</h1>
             <Form onSubmit={this.handleSubmit} className="login-form">
@@ -79,7 +71,6 @@ class NormalLoginForm extends Component {
         </LoginWrapper>);
     }
 }
-
 const Login = Form.create()(NormalLoginForm);
 
 export default Login;
