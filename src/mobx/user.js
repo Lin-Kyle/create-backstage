@@ -1,27 +1,39 @@
 import {observable, action, runInAction, flow} from "mobx";
-import {sStorage} from 'JS/localCache';
+import {localCache} from 'JS/localCache';
 import Axios from 'JS/Axios';
 import api from '@/api';
 
 class User {
-    @observable login_info = {}
+    @observable userData = {}
 
     login = flow(function* (data) {
         try {
-            const res = yield Axios({
-                url: api.login,
-                method: 'post',
-                params: {
-                    username: data.userName,
-                    password: data.password,
-                    remember: data.remember
-                }
-            });
+            const res = yield Axios({url: api.login, data});
             runInAction(() => {
-                sStorage.setItem('userData', res.data);
-                this.login_info = res.data;
+                this.userData = res.data;
             })
-        } catch (e) {}
+            if (!res.error_code) {
+                localCache.setItem('userData', res.data, 1);
+                return true; // 登录成功
+            }
+            return false;
+        } catch (e) {
+            console.log(e);
+        }
+    })
+
+    logout = flow(function* (params) {
+        try {
+            const res = yield Axios({url: api.logout, params});
+            runInAction(() => {
+                this.userData = {};
+            })
+            if (!res.error_code) {
+                localCache.removeItem('userData');
+            }
+        } catch (e) {
+            console.log(e);
+        }
     })
 
 }

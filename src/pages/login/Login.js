@@ -10,14 +10,20 @@ margin: 0 auto;
 transform: translate(0, 200px);
 `;
 
-@inject(stores => ({user: stores.user}))
+@inject(stores => ({global: stores.global, user: stores.user}))
 @observer class NormalLoginForm extends Component {
     handleSubmit = (e) => {
-        const _props = this.props;
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        const _props = this.props;
+        _props.form.validateFields((err, values) => {
             if (!err) {
-                _props.user.login(values);
+                _props.user.login({username: values.userName, password: values.password, remember: values.remember}).then(res => {
+                    if (res) {
+                        // 成功需要获取菜单然后再决定跳转位置
+                        _props.global.getDefaultMenu()
+                        _props.history.push(_props.global.firstPath)
+                    }
+                })
             }
         });
     }
@@ -71,6 +77,7 @@ transform: translate(0, 200px);
         </LoginWrapper>);
     }
 }
+//经 Form.create() 包装过的组件会自带 this.props.form 属性
 const Login = Form.create()(NormalLoginForm);
 
 export default Login;

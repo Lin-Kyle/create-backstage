@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Divider, Icon } from 'antd';
+import {  Icon } from 'antd';
 import styled from 'styled-components';
 
 

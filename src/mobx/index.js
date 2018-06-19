@@ -5,9 +5,7 @@ import user from './user'
 // 严格模式
 configure({enforceActions: true})
 
-const stores = {
+export default {
     global,
     user
 }
-
-export default stores

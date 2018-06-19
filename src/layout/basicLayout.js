@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-// import SilderMenu               from '../components/SiderMenu'
-import GlobalHeader from 'CMPT/GlobalHeader'
-import GlobalFooter from 'CMPT/GlobalFooter'
+import SilderMenu               from 'CMPT/SiderMenu'
+import GlobalHeader             from 'CMPT/GlobalHeader'
+import GlobalFooter             from 'CMPT/GlobalFooter'
 import View from 'ROUTER/view'
 import _ from 'lodash'
 import {observer, inject} from "mobx-react";
@@ -11,9 +11,8 @@ const {Header, Content} = Layout;
 
 @inject(store => ({global: store.global}))
 @observer
-export default class Main extends Component { 
+export default class BasicLayout extends Component {
     componentDidMount() {
-        console.log(1);
         this.resize()
         // BUG 触发了两次
         window.addEventListener('resize', _.debounce(this.resize, 200));

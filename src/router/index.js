@@ -1,16 +1,30 @@
-import React from 'react'
-import {HashRouter, Route} from 'react-router-dom'
+import React, {Component, Fragment} from 'react';
+import {withRouter} from 'react-router-dom';
+import {Switch, HashRouter, Route, Redirect} from 'react-router-dom'
 import Login from 'PAGE/login/login';
-import Main from 'PAGE/main/main';
+import BasicLayout from 'LAYOUT/basicLayout';
+import Authority from './authority'
+import {observer, inject} from 'mobx-react'
 
-export default class Router extends React.Component {
+@inject(store => ({global: store.global}))@observer
+export default class Router extends Component {
     render() {
         return <HashRouter>
-            <switch>
-                <Route exact="exact" path='/' component={Login}/>
-                <Route path="/login" component={Login}/>
-                <Route path="/main" component={Main}/>
-            </switch>
+            <App firstPath={this.props.global.firstPath}/>
         </HashRouter>
+    }
+}
+
+
+class App extends Component {
+    render() {
+        return (<Fragment>
+            <Authority/>
+            <Switch>
+                <Redirect exact={true} from='/' to={this.props.firstPath}/>
+                <Route path="/login" component={Login}/>
+                <Route path="/" component={BasicLayout}/>
+            </Switch>
+        </Fragment>)
     }
 }
