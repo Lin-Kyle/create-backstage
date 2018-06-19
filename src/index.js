@@ -7,7 +7,6 @@ import zhCN from 'antd/lib/locale-provider/zh_CN';
 import {Provider} from "mobx-react"
 import store from "MOBX"
 import Router from "./router"
-import 'CSS/index.css';
 
 import registerServiceWorker from '@/registerServiceWorker';
 

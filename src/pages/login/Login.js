@@ -7,7 +7,6 @@ const FormItem = Form.Item,
     LoginWrapper = styled.div `
 width: 300px;
 margin: 0 auto;
-transform: translate(0, 200px);
 `;
 
 @inject(stores => ({global: stores.global, user: stores.user}))
@@ -31,7 +30,6 @@ transform: translate(0, 200px);
         const {getFieldDecorator} = this.props.form;
 
         return (<LoginWrapper>
-            <h1>账号密码登陆</h1>
             <Form onSubmit={this.handleSubmit} className="login-form">
                 <FormItem>
                     {
