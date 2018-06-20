@@ -1,5 +1,5 @@
 // 认证用户是否登录
-import React, {Component} from 'react';
+import {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {localCache} from 'JS/localCache';
 

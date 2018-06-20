@@ -1,4 +1,4 @@
-import {observable, action, runInAction, flow} from "mobx";
+import {observable, runInAction, flow} from "mobx";
 import {localCache} from 'JS/localCache';
 import Axios from 'JS/Axios';
 import api from '@/api';

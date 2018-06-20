@@ -1,19 +1,12 @@
 import React, {Component} from 'react'
+import {Switch, Route, Link} from 'react-router-dom'
+//單頁面設置titlehttps://www.npmjs.com/package/react-document-title
 import DocumentTitle from 'react-document-title'
 import styled from 'styled-components'
-
-import {Switch, Route, Link} from 'react-router-dom'
 import logo from 'IMG/logo.svg'
 import GlobalFooter from 'CMPT/GlobalFooter'
-import Loadable from 'react-loadable';
-import Loading from 'CMPT/Loading';
+import {Login} from './LoadableComponent';
 import 'CSS/login.less'
-
-const LoadableLogin = Loadable({
-    loader: () => import('PAGE/login/login'),
-    loading: Loading,
-    delay: 30000,
-})
 
 export default class indexLayout extends Component {
     render() {
@@ -31,7 +24,7 @@ export default class indexLayout extends Component {
                             <div className={'desc'}>高朋网智能 Bi 系统</div>
                         </div>
                         <Switch>
-                            <Route path={'/login'} component={LoadableLogin}/>
+                            <Route path={'/login'} component={Login}/>
                         </Switch>
                     </div>
                     <GlobalFooter/>
@@ -44,7 +37,6 @@ export default class indexLayout extends Component {
 const Logo = styled.img `
     height: 44px;
     vertical-align: top;
-    //margin-right: 16px;
 `
 
 const H = styled.div `

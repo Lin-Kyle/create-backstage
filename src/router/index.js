@@ -1,8 +1,6 @@
 import React, {Component, Fragment} from 'react';
-import {withRouter} from 'react-router-dom';
 import {Switch, HashRouter, Route, Redirect} from 'react-router-dom'
-import Login from 'PAGE/login/login';
-import IndexLayout from 'LAYOUT/indexLayout';
+import LoginLayout from 'LAYOUT/loginLayout';
 import BasicLayout from 'LAYOUT/basicLayout';
 import Authority from './authority'
 import {observer, inject} from 'mobx-react'
@@ -23,7 +21,7 @@ class App extends Component {
             <Authority/>
             <Switch>
                 <Redirect exact={true} from='/' to={this.props.firstPath}/>
-                <Route path="/login" component={IndexLayout}/>
+                <Route path="/login" component={LoginLayout}/>
                 <Route path="/" component={BasicLayout}/>
             </Switch>
         </Fragment>)

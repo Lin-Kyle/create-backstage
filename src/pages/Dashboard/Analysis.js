@@ -18,483 +18,310 @@ import {
     Tooltip,
     Coord,
     Legend,
-    Label
+    Label,
+    Guide
 } from 'bizcharts'
-import {View} from '@antv/data-set';
+import {DataSet, DataView} from '@antv/data-set';
 import numeral from 'numeral';
 import './Analysis.less'
 import styled from 'styled-components'
-// import Line from '../../components/Chart/Line'
-// import Inter from '../../components/Chart/IntervalStack'
-// import '../../components/Chart'
-// import KeyTable from './keyTable'
 
-const FormItem = Form.Item;
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
-
-const data3 = [
-    {
-        item: '事例一',
-        count: 40
-    }, {
-        item: '事例二',
-        count: 21
-    }, {
-        item: '事例三',
-        count: 17
-    }, {
-        item: '事例四',
-        count: 13
-    }, {
-        item: '事例五',
-        count: 9
-    }
-];
-const dv = new View();
-dv
-    .source(data3)
-    .transform({type: 'percent', field: 'count', dimension: 'item', as: 'percent'});
-const cols1 = {
-    percent: {
-      formatter: val => !(+val) ? '0' :  ((val * 100).toFixed(1)) + '%'
-    }
-}
-const topColResponsiveProps = {
-    xs: 24,
-    sm: 12,
-    md: 12,
-    lg: 12,
-    xl: 6,
-    style: {
-        marginBottom: 24
-    }
-};
-
-const data2 = [
-    {
-        year: "1991",
-        value: 3
-    }, {
-        year: "1992",
-        value: 4
-    }, {
-        year: "1993",
-        value: 3.5
-    }, {
-        year: "1994",
-        value: 5
-    }, {
-        year: "1995",
-        value: 4.9
-    }, {
-        year: "1996",
-        value: 6
-    }, {
-        year: "1997",
-        value: 7
-    }, {
-        year: "1998",
-        value: 9
-    }, {
-        year: "1999",
-        value: 13
-    }
-];
-const cols11 = {
-    // y轴间隔
-    'sales': {tickInterval: 20},
-};
-const data11 = [
-    { year: '1951 年', sales: 38 },
-    { year: '1952 年', sales: 52 },
-    { year: '1956 年', sales: 61 },
-    { year: '1957 年', sales: 145 },
-    { year: '1958 年', sales: 48 },
-    { year: '1959 年', sales: 38 },
-    { year: '1960 年', sales: 38 },
-    { year: '1962 年', sales: 38 },
-  ];
-
-const cols = {
-    'value': {
-        min: 0
-    },
-    'year': {
-        range: [0, 1]
-    }
-};
-
-const visitData = [
-    {
-        "x": "2018-05-23",
-        "y": 7
-    }, {
-        "x": "2018-05-24",
-        "y": 5
-    }, {
-        "x": "2018-05-25",
-        "y": 4
-    }, {
-        "x": "2018-05-26",
-        "y": 2
-    }, {
-        "x": "2018-05-27",
-        "y": 4
-    }, {
-        "x": "2018-05-28",
-        "y": 7
-    }, {
-        "x": "2018-05-29",
-        "y": 5
-    }, {
-        "x": "2018-05-30",
-        "y": 6
-    }, {
-        "x": "2018-05-31",
-        "y": 5
-    }, {
-        "x": "2018-06-01",
-        "y": 9
-    }, {
-        "x": "2018-06-02",
-        "y": 6
-    }, {
-        "x": "2018-06-03",
-        "y": 3
-    }, {
-        "x": "2018-06-04",
-        "y": 1
-    }, {
-        "x": "2018-06-05",
-        "y": 5
-    }, {
-        "x": "2018-06-06",
-        "y": 3
-    }, {
-        "x": "2018-06-07",
-        "y": 6
-    }, {
-        "x": "2018-06-08",
-        "y": 5
-    }
-]
-
-function onChange(e) {
-    console.log(`radio checked:${e.target.value}`);
-}
+const {Html} = Guide,
+    ds = new DataSet();
 
 export default class Analysis extends Component {
     constructor(props) {
         super(props)
+        this.state = {}
+    }
+    render() {
+        return (<Fragment>
+            <Row gutter={12}>
+                <Col span={12}>
+                    <Card title="餅圖"><Pie/></Card>
+                </Col>
+                <Col span={12}>
+                    <Card title="折线图"><Line/></Card>
+                </Col>
+            </Row>
+            <br />
+            <Card loading={this.state.loading} title="Card title">
+                    <ATable />
+            </Card>
+        </Fragment>)
+    }
+}
+
+class ATable extends Component {
+    constructor(props) {
+        super(props)
         this.state = {
-            loading: true,
-            visible: false,
-            trendVisible: false,
-            modalTitle: '关键指标',
-            keyColumns: [
+            columns: [
                 {
-                    title: '序号',
-                    dataIndex: 'key',
-                    align: 'center',
-                    width: 70
-                    // render: (text, record) => <a href="javascript:;">{text}</a>,
+                    title: 'Name',
+                    dataIndex: 'name',
+                    filters: [
+                        {
+                            text: 'Joe',
+                            value: 'Joe'
+                        }, {
+                            text: 'Jim',
+                            value: 'Jim'
+                        }, {
+                            text: 'Submenu',
+                            value: 'Submenu',
+                            children: [
+                                {
+                                    text: 'Green',
+                                    value: 'Green'
+                                }, {
+                                    text: 'Black',
+                                    value: 'Black'
+                                }
+                            ]
+                        }
+                    ],
+                    // specify the condition of filtering result
+                    // here is that finding the name started with `value`
+                    onFilter: (value, record) => record.name.indexOf(value) === 0,
+                    sorter: (a, b) => a.name.length - b.name.length
                 }, {
-                    title: '小标题',
-                    dataIndex: 'title',
-                    align: 'center',
-                    render: (text, record) => <Input
-                            value={text}
-                            onChange={(e) => {
-                            this.changeValue(record.index, 'title', e.target.value)
-                        }}/>
+                    title: 'Age',
+                    dataIndex: 'age',
+                    defaultSortOrder: 'descend',
+                    sorter: (a, b) => a.age - b.age
                 }, {
-                    title: '报表ID',
-                    width: 100,
-                    dataIndex: 'reportId',
-                    align: 'center',
-                    // render: text => <Input value={text} onChange={null}/>
-                }, {
-                    title: '指标序号',
-                    width: 100,
-                    dataIndex: 'indexNum',
-                    align: 'center',
-                    // render: text => <Input value={text} onChange={null}/>
-                }, {
-                    title: '操作',
-                    width: 70,
-                    dataIndex: 'operation',
-                    align: 'center',
-                    render: (text, record) => <a
-                            href="javascript:;"
-                            onClick={this
-                            .empty
-                            .bind(this, record.index)}>清空</a>
+                    title: 'Address',
+                    dataIndex: 'address',
+                    filters: [
+                        {
+                            text: 'London',
+                            value: 'London'
+                        }, {
+                            text: 'New York',
+                            value: 'New York'
+                        }
+                    ],
+                    filterMultiple: false,
+                    onFilter: (value, record) => record.address.indexOf(value) === 0,
+                    sorter: (a, b) => a.address.length - b.address.length
                 }
             ],
-            keyData: [
+            data: [
                 {
                     key: '1',
-                    index: 1,
-                    title: '新增用户数',
-                    indexNum: '1',
-                    reportId: '2'
+                    name: 'John Brown',
+                    age: 32,
+                    address: 'New York No. 1 Lake Park'
                 }, {
                     key: '2',
-                    index: 2,
-                    title: '活跃用户数',
-                    indexNum: '2',
-                    reportId: '1'
+                    name: 'Jim Green',
+                    age: 42,
+                    address: 'London No. 1 Lake Park'
                 }, {
                     key: '3',
-                    index: 3,
-                    title: '完成支付新卡订单',
-                    indexNum: '1',
-                    reportId: '2'
+                    name: 'Joe Black',
+                    age: 32,
+                    address: 'Sidney No. 1 Lake Park'
                 }, {
                     key: '4',
-                    index: 4,
-                    title: '激活成功新卡订单',
-                    indexNum: '1',
-                    reportId: '1'
-                }
-            ],
-            trendColumns: [
-                {
-                    title: '序号',
-                    dataIndex: 'key',
-                    align: 'center',
-                    width: 70
-                    // render: (text, record) => <a href="javascript:;">{text}</a>,
-                }, {
-                    title: '小标题',
-                    dataIndex: 'title',
-                    align: 'center',
-                    render: (text, record) => <Input
-                            value={text}
-                            onChange={(e) => {
-                            this.changeValue(record.index, 'title', e.target.value)
-                        }}/>
-                }, {
-                    title: '报表ID',
-                    width: 100,
-                    dataIndex: 'reportId',
-                    align: 'center',
-                    render: (text, record) => <Input
-                            value={text}
-                            onChange={(e) => {
-                            this.changeValue(record.index, 'reportId', e.target.value)
-                        }}/>
-                }, {
-                    title: '指标序号',
-                    width: 100,
-                    dataIndex: 'indexNum',
-                    align: 'center',
-                    render: (text, record) => <Input
-                            value={text}
-                            onChange={(e) => {
-                            this.changeValue(record.index, 'indexNum', e.target.value)
-                        }}/>
-                }, {
-                    title: '操作',
-                    width: 70,
-                    dataIndex: 'operation',
-                    align: 'center',
-                    render: (text, record) => <a
-                            href="javascript:;"
-                            onClick={this
-                            .empty
-                            .bind(this, record.index)}>清空</a>
-                }
-            ],
-            trendIndex: [
-                {
-                    title: '新增用户数',
-                    key: 0
-                }, {
-                    title: '活跃用户数',
-                    key: 1
-                }, {
-                    title: '新增申办订单数',
-                    key: 2
-                }, {
-                    title: '完成支付新卡订单数',
-                    key: 3
-                }, {
-                    title: '激活成功新卡订单',
-                    key: 4
-                }, {
-                    title: '结余黑名单用户数',
-                    key: 5
+                    name: 'Jim Red',
+                    age: 32,
+                    address: 'London No. 2 Lake Park'
                 }
             ]
         }
     }
-    /**
-     * TODO
-     * key 关键字
-     */
-    changeValue = (index, key, value) => {
-        // 找到对应index 修改对应 key value
-        let keyData = this.state.keyData;
-        let keyIndex = keyData.findIndex(item => item.index === index)
-        keyData[keyIndex][key] = value
-        this.setState({keyData})
-    }
-    componentDidMount() {
-        setTimeout(() => {
-            this.setState({loading: false})
-        }, 500)
-    }
-    empty(index) {
-        let keyData = this.state.keyData
-        // 对应 index
-        let newKeyData = keyData.map(item => {
-            if (item.index === index) {
-                console.log(this.reportDom);
-                item = {
-                    ...item,
-                    title: '',
-                    indexNum: '',
-                    reportId: ''
-                }
-            }
-            return item
-        })
 
-        this.setState({keyData: newKeyData})
-
-    }
-    showKeyModal = () => {
-        this.setState({modalTitle: '关键指标', visible: true})
+    onChange = (pagination, filters, sorter) => {
+        console.log('params', pagination, filters, sorter);
     }
 
-    changeStatus = (visible) => {
-        this.setState({visible})
-    }
-    handleOk = () => {
-        this.changeStatus(false)
-    }
-    handleCancel = () => {
-        this.changeStatus(false)
-    }
     render() {
-        const {keyColumns, keyData, modalTitle, visible, trendIndex} = this.state
-        return (
-            <Fragment>
-                <Card
-                    style={{
-                    marginTop: 24
-                }}
-                    loading={this.state.loading}
-                    title={<span> 整体趋势 < Icon type = "edit" /></span>}
-                    bordered={false}>
-
-                    <RadioGroup onChange={onChange} defaultValue={trendIndex[0].title}>
-                        {trendIndex.map(item => (
-                            <RadioButton key={item.title} value={item.title}>{item.title}</RadioButton>
-                        ))
+        const {data, columns} = this.state;
+        return <Table columns={columns} dataSource={data} onChange={this.onChange}/>
+    }
 }
 
-                    </RadioGroup>
-                    {/* <Line data={data2} scale={cols} type='line'></Line> */}
-                </Card>
-
-
-                <Modal
-                    title={'整体趋势'}
-                    visible={this.state.trendVisible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                    maskClosable={false}
-                    width={600}>
-                    <Table
-                        columns={this.state.trendColumns}
-                        dataSource={this.state.keyData}
-                        bordered
-                        pagination={false}/>
-                </Modal>
-                {/* // ------------------ */}
-                <Row gutter={24} style={{
-                    marginTop: 24
-                }}>
-                    <Col span={12}>
-                        <Card title="新卡申办步骤转化" bordered={false} loading={this.state.loading}>
-                        <Chart height={500} data={data11} scale={cols11} forceFit>
-                            <Axis name="year" />
-                            <Axis name="sales" />
-                            <Tooltip crosshairs={{type : "y"}}/>
-                            <Geom type="interval" position="year*sales" />
-                        </Chart>
-
-
-                        </Card>
-                    </Col>
-                    <Col span={12}>
-                        <Card title="省份每日新卡申办量" bordered={false} loading={this.state.loading}>
-                            <Chart
-                                height={500}
-                                data={dv}
-                                scale={cols1}
-                                padding={[80, 100, 80, 80]}
-                                forceFit>
-                                <Coord type='theta' radius={0.75}/>
-                                <Axis name="percent"/> {/* 选择样式 */}
-                                <Legend position='right'/> {/* 鼠标移入的样式 */}
-                                <Tooltip
-                                    showTitle={false}
-                                    itemTpl='<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'/>
-
-                                <Geom
-                                    type="intervalStack"
-                                    position="percent"
-                                    color='item'
-                                    tooltip={[
-                                    'item*percent',
-                                    (item, percent) => {
-                                        percent = percent * 100 + '111%';
-                                        return {name: item, value: percent};
-                                    }
-                                ]}
-                                    style={{
-                                    lineWidth: 1,
-                                    stroke: '#fff'
-                                }}>
-
-                                    <Label
-                                        content='percent'
-                                        formatter={(val, item) => {
-                                        return item.point.item + ': ' + val;
-                                    }}/>
-                                </Geom>
-                            </Chart>
-                        </Card>
-                    </Col>
-                </Row>
-                {/* {*-------------------------- *} */}
-                <Row gutter={24} style={{
-                    marginTop: 24
-                }}>
-                    <Col span={12}>
-                        <Card title="新卡付费率" bordered={false} loading={this.state.loading}>
-                            {/* <Inter></Inter> */}
-
-
-                        </Card>
-                    </Col>
-                    <Col span={12}>
-                        <Card title="黑名单监控" bordered={false} loading={this.state.loading}>
-                            {/* <Line data={data2} scale={cols} type='line'></Line> */}
-                        </Card>
-                    </Col>
-                </Row>
-            </Fragment>
-        )
+//餅圖
+class Pie extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            name: 'pie',
+            data: [
+                {
+                    item: '事例一',
+                    count: 40
+                }, {
+                    item: '事例二',
+                    count: 21
+                }, {
+                    item: '事例三',
+                    count: 17
+                }, {
+                    item: '事例四',
+                    count: 13
+                }, {
+                    item: '事例五',
+                    count: 9
+                }
+            ],
+            cols: {
+                percent: {
+                    formatter: val => !(+ val)
+                        ? '0'
+                        : ((val * 100).toFixed(1)) + '%'
+                }
+            },
+            Tooltip_itemTpl: `<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>`,
+            Guide_html: `<div style="color:#8c8c8c;font-size:1.16em;text-align: center;width: 10em;">主机<br><span style="color:#262626;font-size:2.5em">200</span>次數</div>`,
+            Geom_tooltip: (item, percent) => {
+                return {
+                    name: item,
+                    value: !(+ percent)
+                        ? '0'
+                        : ((percent * 100).toFixed(1)) + '%'
+                };
+            },
+            Label_formatter: (val, item) => item.point.item + ': ' + val
+        }
     }
+
+    render() {
+        const _state = this.state;
+        let dv = ds.getView(_state.name);
+        if (!dv) {
+            dv = ds.createView(_state.name).source(_state.data).transform({type: 'percent', field: 'count', dimension: 'item', as: 'percent'})
+        }
+        return PieChart(dv, this.state)
+    }
+}
+const PieChart = (dv, {
+    height = 500,
+    cols,
+    Tooltip_itemTpl,
+    Guide_html,
+    Geom_tooltip,
+    Label_formatter
+}) => {
+    return (<Chart height={height} data={dv} scale={cols} forceFit="forceFit">
+        <Coord type={'theta'} radius={0.7} innerRadius={0.6}/>
+        <Axis name="percent" title="title"/>
+        <Legend position='right' offsetX={-80}/>
+        <Tooltip showTitle={false} itemTpl={Tooltip_itemTpl}/>
+        <Guide >
+            <Html position={['50%', '50%']} html={Guide_html} alignX='middle' alignY='middle'/>
+        </Guide>
+        <Geom type="intervalStack" position="percent" color='item' tooltip={['item*percent', Geom_tooltip]}>
+            <Label content='percent' formatter={Label_formatter}/>
+        </Geom>
+    </Chart>)
+}
+
+//折线图
+class Line extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            name: 'line',
+            data: [
+                {
+                    month: 'Jan',
+                    Tokyo: 7.0,
+                    London: 3.9
+                }, {
+                    month: 'Feb',
+                    Tokyo: 6.9,
+                    London: 4.2
+                }, {
+                    month: 'Mar',
+                    Tokyo: 9.5,
+                    London: 5.7
+                }, {
+                    month: 'Apr',
+                    Tokyo: 14.5,
+                    London: 8.5
+                }, {
+                    month: 'May',
+                    Tokyo: 18.4,
+                    London: 11.9
+                }, {
+                    month: 'Jun',
+                    Tokyo: 21.5,
+                    London: 15.2
+                }, {
+                    month: 'Jul',
+                    Tokyo: 25.2,
+                    London: 17.0
+                }, {
+                    month: 'Aug',
+                    Tokyo: 26.5,
+                    London: 16.6
+                }, {
+                    month: 'Sep',
+                    Tokyo: 23.3,
+                    London: 14.2
+                }, {
+                    month: 'Oct',
+                    Tokyo: 18.3,
+                    London: 10.3
+                }, {
+                    month: 'Nov',
+                    Tokyo: 13.9,
+                    London: 6.6
+                }, {
+                    month: 'Dec',
+                    Tokyo: 9.6,
+                    London: 4.8
+                }
+            ],
+            cols: {
+                month: {
+                    range: [0, 1]
+                }
+            },
+            Axis_label: {
+                formatter: val => `${val}°C`
+            }
+        }
+    }
+
+    render() {
+        const _state = this.state;
+        let dv = ds.getView(_state.name);
+        if (!dv) {
+            dv = ds.createView(_state.name).source(_state.data).transform({
+                type: 'fold',
+                fields: [
+                    'Tokyo', 'London'
+                ], // 展开字段集
+                key: 'city', // key字段
+                value: 'temperature', // value字段
+            })
+        }
+        return LineChart(dv, this.state)
+    }
+
+}
+const LineChart = (dv, {
+    height = 500,
+    cols,
+    Axis_label
+}) => {
+    return (<Chart height={height} data={dv} scale={cols} forceFit="forceFit">
+        <Legend/>
+        <Axis name="temperature" label={Axis_label}/>
+        <Axis name="month"/>
+        <Tooltip crosshairs={{
+                type: "y"
+            }}/>
+        <Geom type="line" position="month*temperature" size={2} color={'city'} shape={'smooth'}/>
+        <Geom type='point' position="month*temperature" size={4} color={'city'} shape={'circle'}/>
+    </Chart>)
 }
 
 const Top = styled.div `
-
     .action {
         cursor: pointer;
         float: right;
