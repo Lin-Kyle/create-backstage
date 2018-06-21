@@ -6,6 +6,7 @@ import View from 'ROUTER/view'
 import _ from 'lodash'
 import {observer, inject} from "mobx-react";
 import {Layout} from 'antd';
+import 'ant-design-pro/dist/ant-design-pro.css'
 
 const {Header, Content} = Layout;
 

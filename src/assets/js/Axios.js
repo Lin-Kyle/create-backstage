@@ -16,7 +16,7 @@ const OpenNotification = (type, {
             development: 'https://dev.api-bi.etc.gplqdb.com', // 开发环境
             test: 'https://test.api-bi.etc.gplqdb.com',
             production: 'https://api-bi.etc.gplqdb.com'
-        }[process.env.NODE_ENV]
+        }[process.env.REACT_APP_ENV]
     })(),
     //請求設置
     Axios = axios.create({

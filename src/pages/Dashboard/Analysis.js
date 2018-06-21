@@ -1,16 +1,5 @@
 import React, {Fragment, Component} from 'react';
-import {
-    Card,
-    Icon,
-    Row,
-    Col,
-    Tooltip as AntTooltip,
-    Radio,
-    Modal,
-    Table,
-    Input,
-    Form
-} from 'antd'
+import {Card, Row, Col, Table} from 'antd'
 import {
     Chart,
     Axis,
@@ -21,10 +10,9 @@ import {
     Label,
     Guide
 } from 'bizcharts'
-import {DataSet, DataView} from '@antv/data-set';
-import numeral from 'numeral';
+import {DataSet} from '@antv/data-set';
 import './Analysis.less'
-import styled from 'styled-components'
+import {money} from 'JS/number'
 
 const {Html} = Guide,
     ds = new DataSet();
@@ -44,9 +32,9 @@ export default class Analysis extends Component {
                     <Card title="折线图"><Line/></Card>
                 </Col>
             </Row>
-            <br />
+            <br/>
             <Card loading={this.state.loading} title="Card title">
-                    <ATable />
+                <ATable/>
             </Card>
         </Fragment>)
     }
@@ -169,9 +157,7 @@ class Pie extends Component {
             ],
             cols: {
                 percent: {
-                    formatter: val => !(+ val)
-                        ? '0'
-                        : ((val * 100).toFixed(1)) + '%'
+                    formatter: val => money(val) + '%'
                 }
             },
             Tooltip_itemTpl: `<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>`,
@@ -179,9 +165,7 @@ class Pie extends Component {
             Geom_tooltip: (item, percent) => {
                 return {
                     name: item,
-                    value: !(+ percent)
-                        ? '0'
-                        : ((percent * 100).toFixed(1)) + '%'
+                    value: money(percent) + '%'
                 };
             },
             Label_formatter: (val, item) => item.point.item + ': ' + val
@@ -320,34 +304,3 @@ const LineChart = (dv, {
         <Geom type='point' position="month*temperature" size={4} color={'city'} shape={'circle'}/>
     </Chart>)
 }
-
-const Top = styled.div `
-    .action {
-        cursor: pointer;
-        float: right;
-    }
-`
-
-const CardFooter = styled.div `
-        font-size: 14px;
-        line-height: 22px;
-    .caret {
-        margin-left: 4px;
-        position: relative;
-        top: 1px;
-    }
-`
-
-const Body = styled.div `
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: break-all;
-    white-space: nowrap;
-    color: @heading-color;
-    margin-top: 4px;
-    margin-bottom: 0;
-    font-size: 30px;
-    line-height: 38px;
-    height: 38px;
-    margin-bottom: 12px;
-`
