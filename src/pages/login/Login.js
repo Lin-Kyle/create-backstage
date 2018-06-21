@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+﻿import React, {Component} from 'react';
 import styled from 'styled-components';
 import {Form, Icon, Input, Button, Checkbox} from 'antd';
 import {observer, inject} from 'mobx-react';
@@ -79,3 +79,4 @@ margin: 0 auto;
 const Login = Form.create()(NormalLoginForm);
 
 export default Login;
+ 
